@@ -20,7 +20,7 @@
 		"url": "https://github.com/danielcgilibert/blog-template/issues"
 	},
 	"scripts": {
-		"dev": "npx tinacms dev -c \"astro dev --port 8080\"",
+		"dev": "npx tinacms dev -c \"astro dev --host --port 8080\"",
 		"start": "astro dev",
 		"build": "astro build",
 		"sync": "astro sync",
