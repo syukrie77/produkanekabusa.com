@@ -31,5 +31,119 @@ const { title, description, image, articleDate } = Astro.props
 				margin-left: calc(100vw - 100%); /* prevent layout shift */
 			}
 		</style>
+
+		<!-- Floating WhatsApp Button (Lakubanyak) -->
+		<a
+			id='wa-float'
+			class='whatsapp-float'
+			href='#'
+			target='_blank'
+			rel='noopener'
+			aria-label='Chat via WhatsApp'
+			title='Chat via WhatsApp'
+		>
+			<!-- Inline SVG biar tanpa dependensi eksternal -->
+			<svg viewBox='0 0 32 32' aria-hidden='true' width='28' height='28'>
+				<path
+					d='M19.11 17.63c-.28-.14-1.64-.81-1.89-.9-.25-.09-.43-.14-.61.14-.18.28-.7.9-.86 1.08-.16.18-.32.2-.6.07-.28-.14-1.17-.43-2.23-1.37-.82-.73-1.37-1.63-1.53-1.9-.16-.28-.02-.43.12-.57.12-.12.28-.32.41-.48.14-.16.18-.28.28-.46.09-.18.05-.34-.02-.48-.07-.14-.61-1.47-.84-2.01-.22-.53-.45-.46-.61-.46h-.52c-.18 0-.48.07-.73.34-.25.28-.96.94-.96 2.29s.99 2.66 1.13 2.85c.14.18 1.96 2.99 4.75 4.09.66.27 1.17.43 1.57.55.66.21 1.27.18 1.75.11.53-.08 1.64-.67 1.87-1.31.23-.64.23-1.19.16-1.31-.07-.12-.25-.2-.53-.34zM16.01 3C9.93 3 5 7.9 5 13.94c0 2.21.66 4.27 1.79 5.98L5 29l9.27-1.72c1.64.9 3.53 1.42 5.74 1.42 6.08 0 11.01-4.9 11.01-10.94C31.01 7.9 26.09 3 20.01 3h-4z'
+					fill='white'></path>
+			</svg>
+		</a>
+
+		<style>
+			.whatsapp-float {
+				position: fixed;
+				inset: auto 18px 18px auto; /* right-bottom */
+				display: inline-flex;
+				justify-content: center;
+				align-items: center;
+				width: 62px;
+				height: 62px;
+				border-radius: 50%;
+				background: #25d366; /* default light theme */
+				box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+				z-index: 9999;
+				text-decoration: none;
+				transform: translateY(12px);
+				opacity: 0;
+				animation: wa-enter 0.45s ease-out forwards;
+				transition:
+					transform 0.18s ease,
+					box-shadow 0.18s ease;
+			}
+			.whatsapp-float:hover {
+				transform: translateY(-2px) scale(1.03);
+				box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+			}
+			.whatsapp-float:active {
+				transform: translateY(0) scale(0.98);
+			}
+
+			/* Dark mode otomatis */
+			@media (prefers-color-scheme: dark) {
+				.whatsapp-float {
+					background: #1fa855; /* sedikit lebih gelap agar pas di dark bg */
+					box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55);
+				}
+			}
+
+			/* Hargai reduced motion */
+			@media (prefers-reduced-motion: reduce) {
+				.whatsapp-float {
+					animation: none;
+					opacity: 1;
+					transform: none;
+					transition: none;
+				}
+			}
+
+			/* Mobile: perbesar touch target */
+			@media (max-width: 480px) {
+				.whatsapp-float {
+					width: 68px;
+					height: 68px;
+					inset: auto 14px 14px auto;
+				}
+				.whatsapp-float svg {
+					width: 30px;
+					height: 30px;
+				}
+			}
+
+			@keyframes wa-enter {
+				0% {
+					opacity: 0;
+					transform: translateY(12px) scale(0.96);
+					filter: blur(2px);
+				}
+				60% {
+					opacity: 1;
+					transform: translateY(-2px) scale(1.02);
+					filter: blur(0);
+				}
+				100% {
+					opacity: 1;
+					transform: translateY(0) scale(1);
+				}
+			}
+		</style>
+
+		<script>
+			;(function () {
+				// ====== KONFIGURASI ======
+				const PHONE = '6281234567890' // GANTI: nomor WA (format internasional tanpa + dan tanpa 0)
+				const DEFAULT_MSG = 'Halo min, saya ingin pesan produk kasur dari Lakubanyak.com.'
+				// ==========================
+
+				const title = document.title?.trim() || 'Halaman'
+				const url = location && location.href ? location.href : ''
+				const pageInfo = ` (Hal: ${title})`
+				const msg = `${DEFAULT_MSG}%0A${encodeURIComponent(url)}%0A${encodeURIComponent(pageInfo)}`
+
+				const waLink = `https://wa.me/${PHONE}?text=${msg}`
+				const a = document.getElementById('wa-float')
+				if (a) a.href = waLink
+			})()
+		</script>
 	</body>
 </html>
